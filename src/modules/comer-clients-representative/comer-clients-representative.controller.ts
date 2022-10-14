@@ -19,6 +19,33 @@ export class ComerClientsRepresentativeController {
     constructor(private readonly comerClientService: ComerClientsRepresentativeService) {
 
     }
+    @ApiOperation({ summary: 'Listado de comer clientes representante' })
+    @ApiQuery({ 
+      name:"inicio", 
+      description:'Número de página', 
+      type:Number 
+    }) 
+    @ApiQuery({ 
+      name:"pageSize", 
+      description:'Cantidad de registros por página', 
+      type:Number 
+    }) 
+   @ApiQuery({ 
+      name:"text", 
+      description:'Texto a buscar', 
+      required:false, 
+      type:String 
+    })
+    @ApiResponse({
+        status: 200,
+        description: 'Listado de documentos',
+        type: ComerClientsRepresentativeDto,
+    })
+    @Get()
+    async findAllComerClientRepresentativeId(@Query() pagination: PaginationDto) {
+        return this.comerClientService.findAllComerClientRepresentativeId(pagination)
+    }
+
     @ApiOperation({ summary: 'Listado de comer clientes representante por nombre' })
     @ApiResponse({
         status: 200,
@@ -62,10 +89,7 @@ export class ComerClientsRepresentativeController {
     @Post('postClientRepresentative')
 
     async createComerClientRepresentative(@Body() createComerClientRepresentative: ComerClientsRepresentativeDto) {
-        
-        const nameResult = await this.comerClientService.createComerClientRepresentative(createComerClientRepresentative)
-        return nameResult ? nameResult :
-        { statusCode: 503, message: "Este Comer cliente representante no fue creado", error: "Create Error"};
+        return this.comerClientService.createComerClientRepresentative(createComerClientRepresentative)
     }
     
     @ApiOperation({ summary: 'Actualizar comer clientes representante'})
@@ -78,10 +102,7 @@ export class ComerClientsRepresentativeController {
     })
     @Put(':id')
     async updateComerClient(@Body() updateComerClientRepresentative: ComerClientsRepresentativeDto, @Param() id: number) {
-        const result = await this.comerClientService.updateComerClientRepresentative(id, updateComerClientRepresentative);
-        return result 
-        ? result
-        : { statusCode: '404', message: 'idRepresentative not found', error: "Not found" };
+        return await this.comerClientService.updateComerClientRepresentative(id, updateComerClientRepresentative);
     }
 
     @ApiOperation({ summary: 'Eliminar comer clientes representante'})
@@ -93,9 +114,6 @@ export class ComerClientsRepresentativeController {
     })
     @Delete(':id')
     async deleteComerClientRepresentative(@Param('id') id: number) {
-        const result = await this.comerClientService.deleteComerClientRepresentative(id);
-        return result 
-        ? result
-        : { statusCode: '404', message: 'idRepresentative not found', error: "Not found" };
+        return await this.comerClientService.deleteComerClientRepresentative(id);
     }
 }

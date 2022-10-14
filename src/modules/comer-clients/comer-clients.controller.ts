@@ -20,6 +20,33 @@ export class ComerClientController {
 
     }
 
+    @ApiOperation({ summary: 'Listado de comer clientes' })
+    @ApiQuery({ 
+      name:"inicio", 
+      description:'Número de página', 
+      type:Number 
+    }) 
+    @ApiQuery({ 
+      name:"pageSize", 
+      description:'Cantidad de registros por página', 
+      type:Number 
+    }) 
+   @ApiQuery({ 
+      name:"text", 
+      description:'Texto a buscar', 
+      required:false, 
+      type:String 
+    })
+    @ApiResponse({
+        status: 200,
+        description: 'Listado de documentos',
+        type: ComerClientDto,
+    })
+    @Get()
+    async findAllComerClientId(@Query() pagination: PaginationDto) {
+        return this.comerClientService.findAllComerClientId(pagination)
+    }
+
     @ApiOperation({ summary: 'Listado de comer clientes por nombre' })
     @ApiParam({
         name: 'nameClient',
@@ -35,24 +62,25 @@ export class ComerClientController {
 
     @Get(':nameClient')
     async getComerClientByName(@Param('nameClient') nameClient: string, @Query() pagination: PaginationDto) {
-        return this.comerClientService.getComerClientByName(nameClient, pagination)
+        return await this.comerClientService.getComerClientByName(nameClient, pagination);
     }
 
-    @ApiOperation({ summary: 'Listado de comer clientes por id' })
-    @ApiResponse({
-        status: 200,
-        description: 'Listado de comer clientes',
-        type: ComerClientDto
-    })
+    @ApiOperation({ summary: 'Listado de causa refactura por id' })
     @ApiParam({
-        name: 'idClient',
-        type: Number,
-        description: 'Clave del comer cliente'
+    name: 'id',
+    description: 'Listado de comer cliente por id'
     })
-    @Get('idclient/:idclient')
-    async getComerClientById(@Param('idclient') idClient: number) {
-        return this.comerClientService.getComerClientById(idClient)
-    }
+    @ApiResponse({
+    status: 200,
+    description: 'Listado de comer cliente por id',
+    type: ComerClientDto,
+    })
+
+    @Get('idclient/:id')
+    async getComerClientById(@Param("id") id: number) {
+
+    return this.comerClientService.getComerClientById(id);
+  }
 
     @ApiOperation({ summary: 'Guardar nuevo comer clientes' })
     @ApiBody({ type: ComerClientDto })
@@ -76,10 +104,7 @@ export class ComerClientController {
     })
     @Put(':id')
     async updateComerClient(@Body() updateComerClient: ComerClientDto, @Param() id: number) {
-        const result = await this.comerClientService.updateComerClient(id, updateComerClient);
-        return result 
-        ? result
-        : { statusCode: '404', message: 'idClient not found', error: "Not found" };
+        return await this.comerClientService.updateComerClient(id, updateComerClient);
     }
 
     @ApiOperation({ summary: 'Eliminar comer clientes'})
@@ -91,9 +116,6 @@ export class ComerClientController {
     })
     @Delete(':id')
     async deleteComerClient(@Param('id') id: number) {
-        const result = await this.comerClientService.deleteComerClient(id);
-        return result 
-        ? result
-        : { statusCode: '404', message: 'idClient not found', error: "Not found" };
+        return await this.comerClientService.deleteComerClient(id);
     }
 }

@@ -6,34 +6,30 @@ import { PaginationDto } from '../shared/pagination.dto';
 @Injectable()
 export class ComerClientXEventService {
     constructor(
-        @Inject('COMER_CLIENTESXEVENTO') private readonly comerClient: ClientProxy,
+        @Inject('COMER_CUSTOMERSXEVENT') private readonly comerClient: ClientProxy,
     ) { }
-    async getComerClientXEventByName(name, pagination: PaginationDto){
-        const pattern = { cmd: 'getComerClientXEventByName' };
-        const {inicio, pageSize} = pagination;
-        const data = {name, inicio, pageSize}
-        return this.comerClient.send(pattern, data);
+    async findAllComerClientXEventId(pagination: PaginationDto) {
+        const pattern = { cmd: 'findAllComerClientXEventId' };
+        return this.comerClient.send(pattern, pagination);
     }
 
     async getComerClientXEventById(idClientXEvent) {
         const pattern = { cmd: 'getComerClientXEventById' };
         const data = idClientXEvent
-        return this.comerClient.send(pattern, data);
+        return await this.comerClient.send(pattern, data);
     }
     
     async createComerClientXEvent(createComerClientXEvent: ComerClientXEventDto) {
         const pattern = { cmd: 'createComerClientXEvent' };
-        return this.comerClient.send(pattern, createComerClientXEvent);
+        return await this.comerClient.send(pattern, createComerClientXEvent);
     }
     async updateComerClientXEvent(id: number, params) {
         const pattern = { cmd: 'updateComerClientXEvent' };
-        const data = {
-            params, id
-        }
-        return this.comerClient.send(pattern, data);
+        const data = { params, id }
+        return await this.comerClient.send(pattern, data);
     }
-    async deleteComerClientXEvent(id){
+    async deleteComerClientXEvent(ComerClientXEvent: ComerClientXEventDto) {
         const pattern = { cmd: 'deleteComerClientXEvent' };
-        return this.comerClient.send(pattern, id);
+        return this.comerClient.send(pattern, ComerClientXEvent);
     }
 }

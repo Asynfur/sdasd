@@ -9,7 +9,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
   imports: [
     ClientsModule.register([
       {
-        name: 'COMER_CLIENTESXEVENTO',
+        name: 'COMER_CUSTOMERSXEVENT',
         transport: Transport.TCP,
         options: {
           host: '127.0.0.1',

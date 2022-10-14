@@ -10,6 +10,7 @@ import {
 } from '@nestjs/swagger';
 import { ComerClientXEventDto } from './dto/comer-clientsxevent.dto'
 import { ComerClientXEventService } from './comer-clientsxevent.service'
+import { PaginationDto } from '../shared/pagination.dto'
 
 @ApiCreatedResponse()
 @Controller('comer-clientsxevent')
@@ -18,6 +19,33 @@ export class ComerClientXEventController {
     constructor(private readonly comerClientService: ComerClientXEventService) {
 
     }
+    @ApiOperation({ summary: 'Listado de comer clientes por evento' })
+    @ApiQuery({ 
+      name:"inicio", 
+      description:'Número de página', 
+      type:Number 
+    }) 
+    @ApiQuery({ 
+      name:"pageSize", 
+      description:'Cantidad de registros por página', 
+      type:Number 
+    }) 
+   @ApiQuery({ 
+      name:"text", 
+      description:'Texto a buscar', 
+      required:false, 
+      type:String 
+    })
+    @ApiResponse({
+        status: 200,
+        description: 'Listado de documentos',
+        type: ComerClientXEventDto,
+    })
+    @Get()
+    async findAllComerClientXEventId(@Query() pagination: PaginationDto) {
+        return this.comerClientService.findAllComerClientXEventId(pagination)
+    }
+
     @ApiOperation({ summary: 'Listado de comer clientes por evento por id' })
     @ApiResponse({
         status: 200,
@@ -54,7 +82,7 @@ export class ComerClientXEventController {
         description: 'Comer clientes por evento actualizado',
         type: ComerClientXEventDto,
     })
-    @Put(':id')
+    @Put()
     async updateComerClient(@Body() updateComerClientXEvent: ComerClientXEventDto, @Param() id: number) {
         return this.comerClientService.updateComerClientXEvent(id, updateComerClientXEvent)
     }
@@ -66,12 +94,9 @@ export class ComerClientXEventController {
         description: 'Comer clientes por evento eliminado',
         type: ComerClientXEventDto
     })
-    @Delete(':id')
-    async deleteComerClientXEvent(@Param() id: number) {
-        const result = await this.comerClientService.deleteComerClientXEvent(id);
-        return result 
-        ? result
-        : { statusCode: '404', message: 'idEvent not found', error: "Not found" };
+    @Delete()
+    async deleteComerClientXEvent(@Body() ComerClientXEvent: ComerClientXEventDto) {
+        return await this.comerClientService.deleteComerClientXEvent(ComerClientXEvent);
     }
     
 }

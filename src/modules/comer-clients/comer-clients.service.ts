@@ -8,6 +8,11 @@ export class ComerClientService {
     constructor(
         @Inject('COMER_CUSTOMERS') private readonly comerClient: ClientProxy,
     ) { }
+    
+    async findAllComerClientId(pagination: PaginationDto) {
+        const pattern = { cmd: 'findAllComerClientId' };
+        return this.comerClient.send(pattern, pagination);
+    }
 
     async getComerClientByName(name, pagination: PaginationDto){
         const pattern = { cmd: 'getComerClientByName' };
@@ -16,10 +21,9 @@ export class ComerClientService {
         return this.comerClient.send(pattern, data);
     }
     
-    async getComerClientById(idClient) {
+    async getComerClientById(id) {
         const pattern = { cmd: 'getComerClientById' };
-        const data = idClient
-        return this.comerClient.send(pattern, data);
+        return this.comerClient.send(pattern, id);
     }
     async createComerClient(createComerClient: ComerClientDto) {
         const pattern = { cmd: 'createComerClient' };

@@ -6,8 +6,13 @@ import { PaginationDto } from '../shared/pagination.dto';
 @Injectable()
 export class ComerClientsRepresentativeService {
     constructor(
-        @Inject('COMER_CLIENTES_REPRESENTANTE') private readonly comerClient: ClientProxy,
+        @Inject('COMER_CUSTOMERS_REPRESENTATIVE') private readonly comerClient: ClientProxy,
     ) { }
+    
+    async findAllComerClientRepresentativeId(pagination: PaginationDto) {
+        const pattern = { cmd: 'findAllComerClientRepresentativeId' };
+        return this.comerClient.send(pattern, pagination);
+    }
 
     async getComerClientRepresentativeByName(name, pagination: PaginationDto){
         const pattern = { cmd: 'getComerClientRepresentativeByName' };
